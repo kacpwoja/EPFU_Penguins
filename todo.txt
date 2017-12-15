@@ -5,7 +5,8 @@ Main Loop - not done
 Interactive Mode - not done
   Displaying the Board - not done
 
-Automatic Mode - not done
+Automatic Mode - simple version complete - Kacper Wojakowski
+  Checks if any moves are possible, selects a random penguin that can move and tries to find a move that will give the highest score.
 
 File Handling - probably finished - Kacper Wojakowski
   Saving to file
