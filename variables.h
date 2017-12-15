@@ -16,4 +16,10 @@ typedef struct gamevariables
 	int score[MAXPLAYERS];      //scores of each player
 }gameV;
 
+typedef struct
+{
+    int x;
+    int y;
+}coordinates;
+
 #endif

@@ -5,10 +5,6 @@
 void GenerateBoard( gameV *game )
 {
     game->currentPlayer = 0;
-    //initializing random seed
-    time_t tt;
-    int seed = &tt;
-    srand(seed);
     //randomizing the board
     int x, y, random;
     for ( y = 0; y <= game->boardSizeY; y ++ )
@@ -63,13 +59,31 @@ void NextPlayer( gameV *game )
     game->currentPlayer %= game->players;
 }
 
-void PutPenguin( gameV *game, int placeX, int placeY )
+void PutPenguin( gameV *game, coordinates place )
 {
-    game->score[ game->currentPlayer ] += game->board[placeX][placeY];
-    game->board[placeX][placeY] = -(game->currentPlayer+1);
+    game->score[ game->currentPlayer ] += game->board[place.x][place.y];
+    game->board[place.x][place.y] = -(game->currentPlayer+1);
 }
 
-void TakePenguin( gameV *game, int x, int y )
+void TakePenguin( gameV *game, coordinates take )
 {
-    game->board[x][y] = 0;
+    game->board[take.x][take.y] = 0;
+}
+
+char CheckMoves( gameV *game, coordinates png )
+{
+    int k;
+
+    for ( k = 1; k < 2 * game->boardSizeX - png.x && k < png.x ; k ++ )
+    {
+        if ( game->board[ png.x + 2 * k ][ png.y ] > 0 ||
+             game->board[ png.x - 2 * k ][ png.y ] > 0 ||
+             game->board[ png.x + k ][ png.y + k ] > 0 ||
+             game->board[ png.x - k ][ png.y + k ] > 0 ||
+             game->board[ png.x + k ][ png.y - k ] > 0 ||
+             game->board[ png.x - k ][ png.y - k ] > 0 )
+            return 'y';
+    }
+
+    return 'n';
 }

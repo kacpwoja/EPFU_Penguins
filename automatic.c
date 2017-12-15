@@ -9,32 +9,52 @@
 
 void AutoPlacement( gameV *game )
 {
-    time_t tt;
-    int seed = &tt;
-    srand(seed);
-
-    int x, y;
+    coordinates place;
 
     do
     {
-        y = rand() % game->boardSizeY;
-        x = 2 * ( rand() % game->boardSizeX ) + y % 2;
-    } while ( game->board[x][y] != 1 );
+        place.y = rand() % game->boardSizeY;
+        place.x = 2 * ( rand() % game->boardSizeX ) + place.y % 2;
+    } while ( game->board[place.x][place.y] != 1 );
 
-    PutPenguin( game, x, y );
+    PutPenguin( game, place );
 }
 
 void AutoMovement( gameV *game )
 {
-    time_t tt;
-    int seed = &tt;
-    srand(seed);
+    coordinates to, from;
+    int success = 0;
 
-    int toX, toY, fromX, fromY;
-    int n = rand() % game->penguins + 1;
-    int x, y, i = 0;
+    RandomizePenguin( game, &from, &success);
+    if ( success == 0 ) return;
 
-    //randomizes the penguin
+    RandomizeMove( game, from, &to );
+
+    TakePenguin( game, from );
+    PutPenguin( game, to );
+}
+
+void RandomizePenguin( gameV *game, coordinates *from, int *success )
+{
+    int n = rand() % game->penguins;
+
+    int i;
+    for ( i = 0; i < game->penguins; i ++ )
+    {
+        FindPenguin( game, from, ( n + i ) % game->penguins );
+
+        char check = CheckMoves( game, *from );
+        if ( check == 'y' )
+        {
+            *success = 1;
+            break;
+        }
+    }
+}
+
+void FindPenguin( gameV *game, coordinates *from, int n )
+{
+    int x, y, i = -1;
     for ( y = 0; y < game->boardSizeY; y ++ )
     {
         for ( x = y % 2; x < 2 * game->boardSizeX; x += 2)
@@ -43,27 +63,74 @@ void AutoMovement( gameV *game )
                 i++;
             if ( i == n )
             {
-                fromX = x;
-                fromY = y;
-                break;
+                from->x = x;
+                from->y = y;
+                return;
             }
         }
-        if ( i == n )
+    }
+}
+
+void RandomizeMove( gameV *game, coordinates from, coordinates *to )
+{
+    int dr = rand() % 6;
+    int k, d;
+    int direction;
+    int bestmove = 0;
+    coordinates test;
+    coordinates best;
+    coordinates dir;
+    int threefound = 0;
+
+    for ( d = 0; d < 6; d ++)
+    {
+        direction = ( dr + d ) % 6;
+
+        switch (direction)
+        {
+        case 0:
+            dir.x = 2;
+            dir.y = 0;
+            break;
+        case 1:
+            dir.x = -2;
+            dir.y = 0;
+            break;
+        case 2:
+            dir.x = 1;
+            dir.y = 1;
+            break;
+        case 3:
+            dir.x = -1;
+            dir.y = -1;
+            break;
+        case 4:
+            dir.x = 1;
+            dir.y = -1;
+            break;
+        case 5:
+            dir.x = -1;
+            dir.y = 1;
+            break;
+        }
+
+        for ( k = 1; k < 2 * game->boardSizeX - from.x && k < from.x; k ++ )
+            {
+                test.x = from.x + k * dir.x; test.y = from.y + k * dir.y;
+
+                if ( game->board[ test.x ][ test.y ] > bestmove )
+                {
+                    bestmove = game->board[ test.x ][ test.y ];
+                    best.x = test.x; best.y = test.y;
+                }
+
+                if ( game->board[ test.x ][ test.y ] <= 0 || bestmove == 3 )
+                    break;
+            }
+
+        if ( bestmove == 3 )
             break;
     }
 
-    //randomizes moves until finds a valid one
-    do
-    {
-        toY = rand() % game->boardSizeY;
-        if ( toY == fromY )
-            toX = 2 * ( rand() % game->boardSizeX ) + toY % 2;
-        else
-        {
-            toX = fromX + toY - fromY;
-        }
-    } while ( toX < 0 || toX > game->boardSizeX || game->board[toX][toY] <= 0 );
-
-    TakePenguin( game, fromX, fromY );
-    PutPenguin( game, toX, toY );
+    to->x = best.x; to->y = best.y;
 }

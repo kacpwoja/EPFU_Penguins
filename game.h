@@ -4,8 +4,10 @@ void GenerateBoard( gameV * );
 
 char CheckState( gameV * );
 
-void PutPenguin( gameV *, int, int );
+void PutPenguin( gameV *, coordinates );
 
 void NextPlayer( gameV * );
 
-void TakePenguin( gameV *, int, int );
+void TakePenguin( gameV *, coordinates );
+
+char CheckMoves( gameV *, coordinates );

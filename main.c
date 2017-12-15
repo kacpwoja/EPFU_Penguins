@@ -11,6 +11,9 @@
 int main ( int argc, char **argv )
 {
 	gameV game;
+	time_t tt;
+    int seed = &tt;
+    srand(seed);
 
 //AUTOMATIC MODE
 	if ( argc == 5 )
