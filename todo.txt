@@ -13,4 +13,6 @@ File Handling - probably finished - Kacper Wojakowski
 
 Variable Structure - mostly done, needs only some tweaks - Kacper Wojakowski
 
+Board Generation - done - Kacper Wojakowski
+
 etc...
