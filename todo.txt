@@ -1,0 +1,16 @@
+List of things to do (please edit this it's just a quick mockup)
+
+Main Loop - not done
+
+Interactive Mode - not done
+  Displaying the Board - not done
+
+Automatic Mode - not done
+
+File Handling - probably finished - Kacper Wojakowski
+  Saving to file
+  Loading from file
+
+Variable Structure - mostly done, needs only some tweaks - Kacper Wojakowski
+
+etc...
