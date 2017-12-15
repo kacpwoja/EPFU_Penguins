@@ -42,22 +42,92 @@ void GenerateBoard( gameV *game )
 
 void PrintBoard( gameV *game )
 {
-    //basic placeholder print to see if loading a file works
-    printf( "%d\n", game->boardSizeX );
-    printf( "%d\n", game->boardSizeY );
-    printf( "%d\n", game->players );
-    printf( "%d\n", game->penguins );
     int x, y;
-    for ( y = 0; y < game->boardSizeY; y ++ )
+    for ( x = 0; x < game->boardSizeX; x++ )
     {
-        for ( x = y%2; x< game->boardSizeX; x += 2 )
+        printf( "/\\");
+    }
+    printf( "\n" );
+    for ( y = 0; y < game->boardSizeY; y++ )
+    {
+        if ( y%2 == 1 )
         {
-            printf( "%d ", game->board[x][y] );
+            printf( "~" );
+            for( x = y%2; x < 2 * game->boardSizeX; x+=2 )
+            {
+                if( game->board[x][y] == 0 )
+                    printf( "~~" );
+                if( game->board[x][y] > 0)
+                    printf( "%dF", game->board[x][y] );
+                if( game->board[x][y] < 0)
+                    printf( "P%d", -game->board[x][y] );
+            }
+            printf("\n/");
+            for( x = 0; x < game->boardSizeX; x++ )
+                printf( "\\/");
+        }
+        if ( y%2 == 0 )
+        {
+            for( x = y%2; x < 2 * game->boardSizeX; x+=2 )
+            {
+                if( game->board[x][y] == 0 )
+                    printf( "~~" );
+                if( game->board[x][y] > 0)
+                    printf( "%dF", game->board[x][y] );
+                if( game->board[x][y] < 0)
+                    printf( "P%d", -game->board[x][y] );
+            }
+            printf( "\n" );
+            for( x = 0; x < game->boardSizeX; x++ )
+                printf( "\\/");
+            printf( "\\" );
         }
         printf( "\n" );
     }
+    printf( "Scores: \n" );
     for ( x = 0; x < game->players; x++ )
     {
-        printf( "%d\n", game->score[x] );
+            printf( "Player%d: %d\t", x+1, game->score[x] );
     }
+    printf( "\n" );
+}
+
+char CheckState( gameV *game )
+{
+    int x, y, n = 0;
+    for( y = 0; y < game->boardSizeY; y ++ )
+    {
+        for( x = y%2; x < 2 * game->boardSizeX; x += 2 )
+        {
+            if( game->board[x][y] < 0 )
+                n++;
+        }
+    }
+
+    if( n == game->players * game->penguins ) return 'm';
+    if( n < game->players * game->penguins ) return 'p';
+    return 'e';
+}
+
+void PlacePenguin( gameV *game, int placeX, int placeY )
+{
+    if ( placeY % 2 == 0 )
+        placeX *= 2;
+    if ( placeY % 2 == 1)
+        placeX = placeX * 2 + 1;
+
+    if ( placeX < 2 * game->boardSizeX && placeY < game->boardSizeY && game->board[placeX][placeY] == 1 )
+    {
+        game->score [ game->currentPlayer ] += game->board[placeX][placeY];
+        game->board[placeX][placeY] = -(game->currentPlayer+1);
+        NextPlayer( game );
+    }
+
+    else printf( "Not a valid move!\n" );
+}
+
+void NextPlayer( gameV *game )
+{
+    game->currentPlayer++;
+    game->currentPlayer %= game->players;
 }

@@ -55,3 +55,16 @@ void LoadBoard( gameV *game )
     }
     fclose( loadfile );
 }
+
+void SavePrompt( gameV *game )
+{
+    char choice;
+    printf( "Do you wish to save? (y/n)\n" );
+    scanf( " %c", &choice );
+    if ( choice == 'y' )
+    {
+        printf( "Input file name:\n" );
+        scanf( " %s", game->filename );
+        SaveBoard( game );
+    }
+}
