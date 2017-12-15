@@ -43,10 +43,7 @@ void Interactive( gameV *game )
 
 void PlacePenguin( gameV *game, int placeX, int placeY )
 {
-    if ( placeY % 2 == 0 )
-        placeX *= 2;
-    if ( placeY % 2 == 1)
-        placeX = placeX * 2 + 1;
+        placeX = placeX * 2 + placeY % 2;
 
     if ( placeX < 2 * game->boardSizeX && placeY < game->boardSizeY && game->board[placeX][placeY] == 1 )
     {

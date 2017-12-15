@@ -65,6 +65,11 @@ void NextPlayer( gameV *game )
 
 void PutPenguin( gameV *game, int placeX, int placeY )
 {
-    game->score [ game->currentPlayer ] += game->board[placeX][placeY];
+    game->score[ game->currentPlayer ] += game->board[placeX][placeY];
     game->board[placeX][placeY] = -(game->currentPlayer+1);
+}
+
+void TakePenguin( gameV *game, int x, int y )
+{
+    game->board[x][y] = 0;
 }
