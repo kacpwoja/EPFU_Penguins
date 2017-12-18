@@ -5,6 +5,13 @@ void SaveBoard( gameV *game )
 {
     FILE *savefile;
     savefile = fopen( &game->filename, "w" );
+
+    if ( savefile == NULL ) //error handling
+    {
+        printf ( "ERROR: Can't create '%s'!\n", game->filename );
+        return;
+    }
+
     //printing first data
     fprintf( savefile, "%d\n", game->boardSizeX );
     fprintf( savefile, "%d\n", game->boardSizeY );
@@ -33,6 +40,13 @@ void LoadBoard( gameV *game )
 {
     FILE *loadfile;
     loadfile = fopen( &game->filename, "r" );
+
+    if ( loadfile == NULL ) //error handling
+    {
+        printf ( "ERROR: '%s' does not exist!\n", game->filename );
+        return;
+    }
+
     //scanning first data
     fscanf( loadfile, "%d\n", &game->boardSizeX );
     fscanf( loadfile, "%d\n", &game->boardSizeY );

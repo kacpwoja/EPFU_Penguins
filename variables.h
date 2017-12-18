@@ -17,7 +17,7 @@ typedef struct gamevariables
 	int maxmoves; // in interactive mode maximal number of movements or sth like that
 }gameV;
 
-typedef struct
+typedef struct //simple structure to make things less messy
 {
     int x;
     int y;

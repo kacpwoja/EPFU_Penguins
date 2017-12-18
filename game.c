@@ -2,7 +2,7 @@
 #include <time.h>
 #include "variables.h"
 
-void GenerateBoard( gameV *game )
+void GenerateBoard( gameV *game ) //a function that generates a random board and puts it in the program's variables
 {
     game->currentPlayer = 0;
     //randomizing the board
@@ -37,7 +37,7 @@ void GenerateBoard( gameV *game )
 }
 
 int CheckState( gameV *game )
- {
+{
     int x, y, n = 0;
     for( y = 0; y < game->boardSizeY; y ++ )
     {
@@ -49,28 +49,28 @@ int CheckState( gameV *game )
     }
 
     if( n == game->players * game->penguins ) return 0;
-    if( n < game->players * game->penguins ) return game->players*game->penguins-n;
+    if( n < game->players * game->penguins ) return game->players * game->penguins - n;
     return -1;
 }
 
-void NextPlayer( gameV *game )
+void NextPlayer( gameV *game ) //switches to the next player
 {
     game->currentPlayer++;
     game->currentPlayer %= game->players;
 }
 
-void PutPenguin( gameV *game, coordinates place )
+void PutPenguin( gameV *game, coordinates place ) //places a penguin on the board and adds score
 {
     game->score[ game->currentPlayer ] += game->board[place.x][place.y];
     game->board[place.x][place.y] = -(game->currentPlayer+1);
 }
 
-void TakePenguin( gameV *game, coordinates take )
+void TakePenguin( gameV *game, coordinates take ) //removes a penguin from the board
 {
     game->board[take.x][take.y] = 0;
 }
 
-char CheckMoves( gameV *game, coordinates png )
+char CheckMoves( gameV *game, coordinates png ) //checks if the penguin on given coordinates can move - returns 'y' if yes, 'n' if not
 {
     int k;
 

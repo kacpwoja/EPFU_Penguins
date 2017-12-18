@@ -4,10 +4,9 @@
 #include "game.h"
 #include "variables.h"
 
-//simple 'AI' that just randomizes the moves
-//To add: checking if there are any moves possible (it gets stuck in a while loop otherwise...)
+//simple 'AI' that just randomizes the penguin and then picks the best move for that penguin for movement and completely randomizes for placement
 
-void AutoPlacement( gameV *game )
+void AutoPlacement( gameV *game ) //randomizes a suitable place for a penguin
 {
     coordinates place;
 
@@ -34,7 +33,7 @@ void AutoMovement( gameV *game )
     PutPenguin( game, to );
 }
 
-void RandomizePenguin( gameV *game, coordinates *from, int *success )
+void RandomizePenguin( gameV *game, coordinates *from, int *success ) //randomizes a penguin that can move
 {
     int n = rand() % game->penguins;
 
@@ -52,7 +51,7 @@ void RandomizePenguin( gameV *game, coordinates *from, int *success )
     }
 }
 
-void FindPenguin( gameV *game, coordinates *from, int n )
+void FindPenguin( gameV *game, coordinates *from, int n ) //finds the coordinates of a penguin with a number
 {
     int x, y, i = -1;
     for ( y = 0; y < game->boardSizeY; y ++ )
@@ -71,7 +70,7 @@ void FindPenguin( gameV *game, coordinates *from, int n )
     }
 }
 
-void RandomizeMove( gameV *game, coordinates from, coordinates *to )
+void RandomizeMove( gameV *game, coordinates from, coordinates *to ) //randomizes a direction and then finds the closest move that gives the most points
 {
     int dr = rand() % 6;
     int k, d;

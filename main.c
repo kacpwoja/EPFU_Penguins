@@ -10,29 +10,34 @@
 
 int main ( int argc, char **argv )
 {
-	gameV game;
+	gameV game;             //initializes the game struct and the random seed
 	time_t tt;
     int seed = &tt;
     srand(seed);
 
 //AUTOMATIC MODE
-printf("%d %s %s\n",argc, argv[0],argv[1]);
-if ( argc == 5 )
+    if ( argc == 5 )
     {
         strcpy( game.filename, argv[3] );
+        game.players = 0;
         LoadBoard( &game );
+        if ( game.players == 0 )
+            return 1;
 
         int playerNumber = atoi( argv[2] );
+
         if ( playerNumber <= game.players )
             game.currentPlayer = playerNumber - 1;
+
         else
         {
             printf( "ERROR: player number too big!\n" );
             return 1;
         }
+
         if ( strcmp( argv[1], "placement" ) == 0 )
         {
-            if ( CheckState( &game ) != 'p' )
+            if ( CheckState( &game ) <= 0 )
             {
                 printf ( "Phase does not match with the board state!\n" );
                 return 1;
@@ -40,9 +45,10 @@ if ( argc == 5 )
 
             AutoPlacement( &game );
         }
+
         else if ( strcmp( argv[1], "movement" ) == 0 )
         {
-            if ( CheckState( &game ) != 'm' )
+            if ( CheckState( &game ) != 0 )
             {
                 printf ( "Phase does not match with the board state!\n" );
                 return 1;
@@ -50,6 +56,7 @@ if ( argc == 5 )
 
             AutoMovement( &game );
         }
+
         else
         {
             printf( "ERROR: wrong phase name!\n" );
@@ -59,7 +66,7 @@ if ( argc == 5 )
         strcpy( game.filename, argv[4] );
         SaveBoard( &game );
     }
-
+//INTERACTIVE MODE
     else
     {
         char choice = '0';
