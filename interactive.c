@@ -16,7 +16,7 @@ void Interactive( gameV *game )
         scanf(" %c",&choice);
         if(choice=='y')
         {
-        n=(game->penguins)*(game->players)-state;
+        n=state;
         while(n!=0)
         {
             system("cls");
