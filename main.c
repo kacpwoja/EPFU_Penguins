@@ -95,7 +95,7 @@ if ( argc == 5 )
                 Interactive( &game );
             }
 
-            /*
+            /* previous version
             switch ( choice )
             {
             case 'n':

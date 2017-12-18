@@ -74,7 +74,7 @@ void Interactive( gameV *game )
 
 
 
-    /*
+    /* Previous version
     while( state != 'q' )
     {
         state = CheckState( game );
