@@ -36,8 +36,8 @@ void GenerateBoard( gameV *game )
     }
 }
 
-char CheckState( gameV *game )
-{
+int CheckState( gameV *game )
+ {
     int x, y, n = 0;
     for( y = 0; y < game->boardSizeY; y ++ )
     {
@@ -48,9 +48,9 @@ char CheckState( gameV *game )
         }
     }
 
-    if( n == game->players * game->penguins ) return 'm';
-    if( n < game->players * game->penguins ) return 'p';
-    return 'e';
+    if( n == game->players * game->penguins ) return 0;
+    if( n < game->players * game->penguins ) return n;
+    return -1;
 }
 
 void NextPlayer( gameV *game )

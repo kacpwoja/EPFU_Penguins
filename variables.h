@@ -14,6 +14,7 @@ typedef struct gamevariables
 	char filename[50];
 	int board[MAXSIZE * 2][MAXSIZE];  //array with the board state
 	int score[MAXPLAYERS];      //scores of each player
+	int maxmoves; // in interactive mode maximal number of movements or sth like that
 }gameV;
 
 typedef struct

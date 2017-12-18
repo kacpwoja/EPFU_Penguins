@@ -2,7 +2,79 @@
 
 void Interactive( gameV *game )
 {
-    char state = CheckState( game );
+    int state = CheckState( game );
+    printf( "put number of maximal movements\n" );
+    scanf( "%d", &game->maxmoves );
+    int z=0,n,x,y;
+    coordinates peng;
+    coordinates peng1;
+    char choice;
+    //placement of penguins
+    if(state>0)
+    {
+        printf("there are penguins left to place, do you want to place them now? y/n \n");
+        scanf(" %c",&choice);
+        if(choice=='y')
+        {
+        n=(game->penguins)*(game->players)-state;
+        while(n!=0)
+        {
+            system("cls");
+            PrintBoard( game );
+            z++;
+            printf("player %d place penguin nr. %d (x y)\n", (n%game->players)+1, z );
+            scanf("%d %d",&x,&y);
+//still need to check if it is possible to place penguin
+            PutPenguin(game,x,y);
+            NextPlayer(game);
+            n--;
+
+
+        }
+        printf("all penguins are placed, do you want to save the board? y/n \n");
+        scanf(" %c", &choice);
+        if(choice=='y') SaveBoard(game);
+        }
+    }
+
+
+    //main loop of interactive mode
+    z=0;
+    game->currentPlayer=0;
+    while(z<=game->maxmoves+1  /* && penguinsabletomove>0 */ )
+    {
+    z++;
+    system("cls");
+    PrintBoard( game );
+    printf("Move nr. %d:\n", z);
+    printf("Player nr. %d, move penguin into another field \n ", game->currentPlayer+1);
+    printf("Position of penguin you want to move (x y): \n");
+    scanf("%d %d", &peng.x, &peng.y);
+    //to do- check if there is a penguin on x,y
+    printf("\n\n %c \n",CheckMoves(game, peng ) );
+    //while(CheckMoves(game, peng )!='y')
+    while(game->board[peng.x][peng.y]+game->currentPlayer+1!=0)
+    {
+        printf("\n Move unavailable, try another penguin\n", game->currentPlayer+1, (z%game->players)+1);
+    scanf("%d %d", &peng.x, &peng.y);
+    }
+
+    printf("Field you want penguin to be moved (x y): \n");
+    scanf("%d %d",&peng1.x, &peng1.y);
+
+    PutPenguin(game, peng1.x,peng1.y);
+    TakePenguin(game, peng.x, peng.y);
+    NextPlayer(game);
+
+    }
+
+
+
+
+
+
+
+    /*
     while( state != 'q' )
     {
         state = CheckState( game );
@@ -39,6 +111,8 @@ void Interactive( gameV *game )
             SavePrompt( game );
         }
     }
+
+    */
 }
 
 void PlacePenguin( gameV *game, int placeX, int placeY )

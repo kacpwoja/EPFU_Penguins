@@ -16,7 +16,8 @@ int main ( int argc, char **argv )
     srand(seed);
 
 //AUTOMATIC MODE
-	if ( argc == 5 )
+printf("%d %s %s\n",argc, argv[0],argv[1]);
+if ( argc == 5 )
     {
         strcpy( game.filename, argv[3] );
         LoadBoard( &game );
@@ -29,7 +30,6 @@ int main ( int argc, char **argv )
             printf( "ERROR: player number too big!\n" );
             return 1;
         }
-
         if ( strcmp( argv[1], "placement" ) == 0 )
         {
             if ( CheckState( &game ) != 'p' )
@@ -66,13 +66,40 @@ int main ( int argc, char **argv )
         //test loop for interactive mode menu
         while (choice != 'q')
         {
-            printf( "n - new game\tl - load game\tq - quit\n" );
+            printf( "n - create new random board\tl - load game\tq - quit\n" );
             scanf( " %c", &choice );
+            if (choice=='n')
+            {
+                printf( "insert board dimensions, number of players and penguins for each player:\n" );
+                scanf( "%d %d %d %d", &game.boardSizeX, &game.boardSizeY, &game.players, &game.penguins );
+                GenerateBoard( &game );
+                PrintBoard( &game );
+                printf( "save file? (y/n)\n" );
+                scanf( " %c", &choice );
+                if ( choice == 'y' )
+                {
+                    printf( "insert file name\n" );
+                    scanf( " %s", game.filename );
+                    SaveBoard( &game );
+                }
+                printf( "play now? (y/n)\n" );
+                scanf( " %c", &choice );
+                if ( choice == 'y' )
+                Interactive( &game );
+            }
+            if (choice=='l')
+            {
+                printf( "insert file name\n" );
+                scanf( " %s", game.filename );
+                LoadBoard( &game );
+                Interactive( &game );
+            }
 
+            /*
             switch ( choice )
             {
             case 'n':
-                printf( "insert board dimensions, number of players and penguins:\n" );
+                printf( "insert board dimensions, number of players and penguins for each player:\n" );
                 scanf( "%d %d %d %d", &game.boardSizeX, &game.boardSizeY, &game.players, &game.penguins );
                 GenerateBoard( &game );
 
@@ -100,6 +127,7 @@ int main ( int argc, char **argv )
                 break;
 
             }
+            */
         }
     }
 
