@@ -49,7 +49,7 @@ int CheckState( gameV *game )
     }
 
     if( n == game->players * game->penguins ) return 0;
-    if( n < game->players * game->penguins ) return n;
+    if( n < game->players * game->penguins ) return game->players*game->penguins-n;
     return -1;
 }
 
