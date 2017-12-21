@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
+
 #include "filefunctions.h" //file with functions regarding files (saving/loading etc)
 #include "variables.h"     //file with the structure and possibly more later
 #include "game.h"          //file with main game functions (printing the board, generating the board, checking for correct moves etc)
@@ -10,13 +13,13 @@
 
 int main ( int argc, char **argv )
 {
-	gameV game;             //initializes the game struct and the random seed
 	time_t tt;
     int seed = &tt;
-    srand(seed);
+    srand( (unsigned) time( seed ) );
+	gameV game;             //initializes the game struct and the random seed
 
 //AUTOMATIC MODE
-    if ( argc == 5 )
+    if ( argc >= 5 )
     {
         strcpy( game.filename, argv[3] );
         game.players = 0;

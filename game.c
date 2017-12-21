@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <time.h>
 #include "variables.h"
 
 void GenerateBoard( gameV *game ) //a function that generates a random board and puts it in the program's variables

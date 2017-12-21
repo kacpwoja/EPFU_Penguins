@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <time.h>
 
 #include "game.h"
 #include "variables.h"
@@ -113,10 +112,10 @@ void RandomizeMove( gameV *game, coordinates from, coordinates *to ) //randomize
             break;
         }
 
-        for ( k = 1; k < 2 * game->boardSizeX - from.x && k < from.x; k ++ )
+        for ( k = 1, test.x = from.x + k * dir.x, test.y = from.y + k * dir.y;
+              test.x >= 0 && test.y >= 0 && test.x < 2 * game->boardSizeX && test.y < game->boardSizeY;
+              k ++, test.x = from.x + k * dir.x, test.y = from.y + k * dir.y )
             {
-                test.x = from.x + k * dir.x; test.y = from.y + k * dir.y;
-
                 if ( game->board[ test.x ][ test.y ] > bestmove )
                 {
                     bestmove = game->board[ test.x ][ test.y ];
