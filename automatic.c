@@ -28,8 +28,11 @@ void AutoMovement( gameV *game )
 
     RandomizeMove( game, from, &to );
 
-    TakePenguin( game, from );
-    PutPenguin( game, to );
+    if ( to.x != from.x && to.y != from.y )
+    {
+        TakePenguin( game, from );
+        PutPenguin( game, to );
+    }
 }
 
 void RandomizePenguin( gameV *game, coordinates *from, int *success ) //randomizes a penguin that can move
@@ -130,5 +133,13 @@ void RandomizeMove( gameV *game, coordinates from, coordinates *to ) //randomize
             break;
     }
 
-    to->x = best.x; to->y = best.y;
+    if ( bestmove == 0)
+    {
+        to->x = from.x;
+        to->y = from.y;
+    }
+    else
+    {
+        to->x = best.x; to->y = best.y;
+    }
 }

@@ -73,7 +73,9 @@ char CheckMoves( gameV *game, coordinates png ) //checks if the penguin on given
 {
     int k;
 
-    for ( k = 1; k < 2 * game->boardSizeX - png.x && k < png.x ; k ++ )
+    for ( k = 1; png.x + 2 * k < 2 * game->boardSizeX && png.x - 2 * k >= 0 &&
+                 png.x + k < 2 * game->boardSizeX && png.x + k >= 0 &&
+                 png.y + k < 2 * game->boardSizeX && png.y >= 0 ; k ++ )
     {
         if ( game->board[ png.x + 2 * k ][ png.y ] > 0 ||
              game->board[ png.x - 2 * k ][ png.y ] > 0 ||
