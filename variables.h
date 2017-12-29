@@ -1,8 +1,8 @@
 #ifndef _VARIABLESH_
 #define _VARIABLESH_
 
-#define MAXSIZE 50
-#define MAXPLAYERS 10
+#define MAXSIZE 100
+#define MAXPLAYERS 20
 
 typedef struct gamevariables
 {
