@@ -14,8 +14,7 @@
 int main ( int argc, char **argv )
 {
 	time_t tt;
-    int seed = &tt;
-    srand( (unsigned) time( seed ) );
+    srand( (unsigned) time( &tt ) );
 	gameV game;             //initializes the game struct and the random seed
 
 //AUTOMATIC MODE
