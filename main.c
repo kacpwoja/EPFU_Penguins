@@ -33,7 +33,7 @@ int main ( int argc, char **argv )
 
         else
         {
-            printf( "ERROR: player number too big!\n" );
+            printf( "ERROR: player number incorrect!\n" );
             return 1;
         }
 
@@ -103,40 +103,6 @@ int main ( int argc, char **argv )
                 LoadBoard( &game );
                 Interactive( &game );
             }
-
-            /* previous version
-            switch ( choice )
-            {
-            case 'n':
-                printf( "insert board dimensions, number of players and penguins for each player:\n" );
-                scanf( "%d %d %d %d", &game.boardSizeX, &game.boardSizeY, &game.players, &game.penguins );
-                GenerateBoard( &game );
-
-                printf( "save file? (y/n)\n" );
-                scanf( " %c", &choice );
-                if ( choice == 'y' )
-                {
-                    printf( "insert file name\n" );
-                    scanf( " %s", game.filename );
-                    SaveBoard( &game );
-                }
-
-                printf( "play now? (y/n)\n" );
-                scanf( " %c", &choice );
-                if ( choice == 'y' )
-                Interactive( &game );
-                break;
-            case 'l':
-                printf( "insert file name\n" );
-                scanf( " %s", game.filename );
-                LoadBoard( &game );
-                Interactive( &game );
-            case 'q':
-            default:
-                break;
-
-            }
-            */
         }
     }
 
