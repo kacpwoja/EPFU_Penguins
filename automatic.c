@@ -18,41 +18,6 @@ void AutoPlacement( gameV *game ) //randomizes a suitable place for a penguin
     PutPenguin( game, place );
 }
 
-void AutoMovement( gameV *game )
-{
-    coordinates to, from;
-    int success = 0;
-
-    //RandomizePenguin( game, &from, &success);
-    //if ( success == 0 ) return;
-
-    RandomizeMove( game, &from, &to );
-
-    if ( to.x != from.x )
-    {
-        TakePenguin( game, from );
-        PutPenguin( game, to );
-    }
-}
-
-void RandomizePenguin( gameV *game, coordinates *from, int *success ) //randomizes a penguin that can move
-{
-    int n = rand() % game->penguins;
-
-    int i;
-    for ( i = 0; i < game->penguins; i ++ )
-    {
-        FindPenguin( game, from, ( n + i ) % game->penguins );
-
-        char check = CheckMoves( game, *from );
-        if ( check == 'y' )
-        {
-            *success = 1;
-            break;
-        }
-    }
-}
-
 void FindPenguin( gameV *game, coordinates *from, int n ) //finds the coordinates of a penguin with a number
 {
     int x, y, i = -1;
@@ -74,14 +39,10 @@ void FindPenguin( gameV *game, coordinates *from, int n ) //finds the coordinate
 
 void RandomizeMove( gameV *game, coordinates *from, coordinates *to ) //randomizes a direction and then finds the closest move that gives the most points
 {
-    int dr = rand() % 6;
-    int k, d;
-    int direction;
     int bestmove = 0;
     coordinates test;
     coordinates best;
     coordinates dir;
-    int threefound = 0;
 
     int n = rand() % game->penguins;
 
@@ -89,6 +50,10 @@ void RandomizeMove( gameV *game, coordinates *from, coordinates *to ) //randomiz
     for ( i = 0; i < game->penguins; i ++ )
     {
         FindPenguin( game, from, ( n + i ) % game->penguins );
+
+        int dr = rand() % 6;
+        int k, d;
+        int direction;
 
         for ( d = 0; d < 6; d ++)
         {
@@ -150,5 +115,19 @@ void RandomizeMove( gameV *game, coordinates *from, coordinates *to ) //randomiz
     else
     {
         to->x = best.x; to->y = best.y;
+    }
+}
+
+
+void AutoMovement( gameV *game )
+{
+    coordinates to, from;
+
+    RandomizeMove( game, &from, &to );
+
+    if ( to.x != from.x )
+    {
+        TakePenguin( game, from );
+        PutPenguin( game, to );
     }
 }
