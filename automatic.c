@@ -18,38 +18,6 @@ void AutoPlacement( gameV *game ) //randomizes a suitable place for a penguin
     PutPenguin( game, place );
 }
 
-void AutoMovement( gameV *game )
-{
-    coordinates to, from;
-    int success = 0;
-
-    RandomizePenguin( game, &from, &success);
-    if ( success == 0 ) return;
-
-    RandomizeMove( game, from, &to );
-
-    TakePenguin( game, from );
-    PutPenguin( game, to );
-}
-
-void RandomizePenguin( gameV *game, coordinates *from, int *success ) //randomizes a penguin that can move
-{
-    int n = rand() % game->penguins;
-
-    int i;
-    for ( i = 0; i < game->penguins; i ++ )
-    {
-        FindPenguin( game, from, ( n + i ) % game->penguins );
-
-        char check = CheckMoves( game, *from );
-        if ( check == 'y' )
-        {
-            *success = 1;
-            break;
-        }
-    }
-}
-
 void FindPenguin( gameV *game, coordinates *from, int n ) //finds the coordinates of a penguin with a number
 {
     int x, y, i = -1;
@@ -69,66 +37,97 @@ void FindPenguin( gameV *game, coordinates *from, int n ) //finds the coordinate
     }
 }
 
-void RandomizeMove( gameV *game, coordinates from, coordinates *to ) //randomizes a direction and then finds the closest move that gives the most points
+void RandomizeMove( gameV *game, coordinates *from, coordinates *to ) //randomizes a direction and then finds the closest move that gives the most points
 {
-    int dr = rand() % 6;
-    int k, d;
-    int direction;
     int bestmove = 0;
     coordinates test;
     coordinates best;
     coordinates dir;
-    int threefound = 0;
 
-    for ( d = 0; d < 6; d ++)
+    int n = rand() % game->penguins;
+
+    int i;
+    for ( i = 0; i < game->penguins; i ++ )
     {
-        direction = ( dr + d ) % 6;
+        FindPenguin( game, from, ( n + i ) % game->penguins );
 
-        switch (direction)
+        int dr = rand() % 6;
+        int k, d;
+        int direction;
+
+        for ( d = 0; d < 6; d ++)
         {
-        case 0:
-            dir.x = 2;
-            dir.y = 0;
-            break;
-        case 1:
-            dir.x = -2;
-            dir.y = 0;
-            break;
-        case 2:
-            dir.x = 1;
-            dir.y = 1;
-            break;
-        case 3:
-            dir.x = -1;
-            dir.y = -1;
-            break;
-        case 4:
-            dir.x = 1;
-            dir.y = -1;
-            break;
-        case 5:
-            dir.x = -1;
-            dir.y = 1;
-            break;
-        }
+            direction = ( dr + d ) % 6;
 
-        for ( k = 1, test.x = from.x + k * dir.x, test.y = from.y + k * dir.y;
-              test.x >= 0 && test.y >= 0 && test.x < 2 * game->boardSizeX && test.y < game->boardSizeY;
-              k ++, test.x = from.x + k * dir.x, test.y = from.y + k * dir.y )
+            switch (direction)
             {
-                if ( game->board[ test.x ][ test.y ] > bestmove )
-                {
-                    bestmove = game->board[ test.x ][ test.y ];
-                    best.x = test.x; best.y = test.y;
-                }
-
-                if ( game->board[ test.x ][ test.y ] <= 0 || bestmove == 3 )
-                    break;
+            case 0:
+                dir.x = 2;
+                dir.y = 0;
+                break;
+            case 1:
+                dir.x = -2;
+                dir.y = 0;
+                break;
+            case 2:
+                dir.x = 1;
+                dir.y = 1;
+                break;
+            case 3:
+                dir.x = -1;
+                dir.y = -1;
+                break;
+            case 4:
+                dir.x = 1;
+                dir.y = -1;
+                break;
+            case 5:
+                dir.x = -1;
+                dir.y = 1;
+                break;
             }
 
+            for ( k = 1, test.x = from->x + k * dir.x, test.y = from->y + k * dir.y;
+                  test.x >= 0 && test.y >= 0 && test.x < 2 * game->boardSizeX && test.y < game->boardSizeY;
+                  k ++, test.x = from->x + k * dir.x, test.y = from->y + k * dir.y )
+                {
+                    if ( game->board[ test.x ][ test.y ] > bestmove )
+                    {
+                        bestmove = game->board[ test.x ][ test.y ];
+                        best.x = test.x; best.y = test.y;
+                    }
+
+                    if ( game->board[ test.x ][ test.y ] <= 0 || bestmove == 3 )
+                        break;
+                }
+
+            if ( bestmove == 3 )
+                break;
+        }
         if ( bestmove == 3 )
             break;
     }
+    if ( bestmove == 0)
+    {
+        to->x = from->x;
+        to->y = from->y;
+    }
+    else
+    {
+        to->x = best.x; to->y = best.y;
+    }
+}
 
-    to->x = best.x; to->y = best.y;
+
+void AutoMovement( gameV *game )
+{
+    coordinates to, from;
+
+    RandomizeMove( game, &from, &to );
+
+    if ( to.x != from.x )
+    {
+        TakePenguin( game, from );
+        PutPenguin( game, to );
+    }
 }

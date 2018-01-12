@@ -71,18 +71,37 @@ void TakePenguin( gameV *game, coordinates take ) //removes a penguin from the b
 
 char CheckMoves( gameV *game, coordinates png ) //checks if the penguin on given coordinates can move - returns 'y' if yes, 'n' if not
 {
-    int k;
+    coordinates test;
 
-    for ( k = 1; k < 2 * game->boardSizeX - png.x && k < png.x ; k ++ )
-    {
-        if ( game->board[ png.x + 2 * k ][ png.y ] > 0 ||
-             game->board[ png.x - 2 * k ][ png.y ] > 0 ||
-             game->board[ png.x + k ][ png.y + k ] > 0 ||
-             game->board[ png.x - k ][ png.y + k ] > 0 ||
-             game->board[ png.x + k ][ png.y - k ] > 0 ||
-             game->board[ png.x - k ][ png.y - k ] > 0 )
-            return 'y';
-    }
+    test.x = png.x + 2;
+    test.y = png.y;
+    if ( test.x < 2 * game->boardSizeX && game->board[test.x][test.y] > 0 )
+        return 'y';
+
+    test.x = png.x - 2;
+    test.y = png.y;
+    if ( test.x > 0 && game->board[test.x][test.y] > 0 )
+        return 'y';
+
+    test.x = png.x + 1;
+    test.y = png.y + 1;
+    if ( test.x < 2 * game->boardSizeX && test.y < game->boardSizeY && game->board[test.x][test.y] > 0 )
+        return 'y';
+
+    test.x = png.x + 1;
+    test.y = png.y - 1;
+    if ( test.x < 2 * game->boardSizeX && test.y > 0 && game->board[test.x][test.y] > 0 )
+        return 'y';
+
+    test.x = png.x - 1;
+    test.y = png.y + 1;
+    if ( test.x > 0 && test.y < game->boardSizeY && game->board[test.x][test.y] > 0 )
+        return 'y';
+
+    test.x = png.x - 1;
+    test.y = png.y - 1;
+    if ( test.x > 0 && test.y > 0 && game->board[test.x][test.y] > 0 )
+        return 'y';
 
     return 'n';
 }
