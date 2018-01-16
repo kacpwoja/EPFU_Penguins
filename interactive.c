@@ -5,7 +5,7 @@ void Interactive( gameV *game )
     int state = CheckState( game );
     printf( "put number of maximal movements\n" );
     scanf( "%d", &game->maxmoves );
-    int z=0,n,x,y;
+    int z=0,i,n,x,y,pngabletomove=game->players*game->penguins;
     coordinates peng;
     coordinates peng1;
     char choice;
@@ -24,13 +24,21 @@ void Interactive( gameV *game )
             z++;
             printf("player %d place penguin nr. %d (x y)\n", (n%game->players)+1, z );
             scanf("%d %d",&x,&y);
-//still need to check if it is possible to place penguin
+            while(CheckIfMovePossible(game, x,y)==0)
+            {
+                printf("Placement impossible, try again.\n");
+                scanf("%d %d",&x,&y);
+
+            }
+
             PutPenguin(game,x,y);
             NextPlayer(game);
             n--;
 
 
         }
+        system("cls");
+        PrintBoard( game );
         printf("all penguins are placed, do you want to save the board? y/n \n");
         scanf(" %c", &choice);
         if(choice=='y') SaveBoard(game);
@@ -40,33 +48,83 @@ void Interactive( gameV *game )
 
     //main loop of interactive mode
     z=0;
+    for(i=0; i<game->players; i++)
+    {
+        game->score[i]=0;
+    }
     game->currentPlayer=0;
-    while(z<=game->maxmoves+1  /* && penguinsabletomove>0 */ )
+    while(z<=game->maxmoves+1  && pngabletomove>0 )
     {
     z++;
     system("cls");
     PrintBoard( game );
     printf("Move nr. %d:\n", z);
-    printf("Player nr. %d, move penguin into another field \n ", game->currentPlayer+1);
-    printf("Position of penguin you want to move (x y): \n");
+    printf("Player nr. %d, move penguin into another field \n", game->currentPlayer+1);
+    printf("Position of penguin you want to move (x y): (-1 -1 to pass move) \n");
     scanf("%d %d", &peng.x, &peng.y);
-    //to do- check if there is a penguin on x,y
-    printf("\n\n %c \n",CheckMoves(game, peng ) );
-    //while(CheckMoves(game, peng )!='y')
-    while(game->board[peng.x][peng.y]+game->currentPlayer+1!=0)
+    if(peng.x!=-1 && peng.y!=-1)
     {
-        printf("\n Move unavailable, try another penguin\n", game->currentPlayer+1, (z%game->players)+1);
+
+    while(CheckMoves(game,peng.x,peng.y)=='n' && (peng.x!=-1 && peng.y!=-1))
+    {
+        while(game->board[peng.x][peng.y]+(game->currentPlayer)+1!=0 && (peng.x!=-1 && peng.y!=-1))
+    {
+        printf("Move unavailable, try another penguin\n", game->currentPlayer+1, (z%game->players)+1);
     scanf("%d %d", &peng.x, &peng.y);
     }
 
+        printf("you can't move this penguin, choose another one or pass %c\n",CheckMoves(game,peng.x,peng.y));
+        scanf("%d %d", &peng.x, &peng.y);
+    }
+    if(peng.x!=-1 && peng.y!=-1)
+    {
     printf("Field you want penguin to be moved (x y): \n");
     scanf("%d %d",&peng1.x, &peng1.y);
+    while((CheckIfMovePossible(game,peng1.x,peng1.y)==0)||(game->board[peng1.x][peng1.y]<1))
+    {
+        printf("Move unavailable, try again \n");
+        scanf("%d %d",&peng1.x, &peng1.y);
+    }
+
 
     PutPenguin(game, peng1.x,peng1.y);
     TakePenguin(game, peng.x, peng.y);
+    }}
     NextPlayer(game);
 
+    pngabletomove=0;
+    for( y = 0; y < game->boardSizeY; y ++ )
+    {
+        for( x = y%2; x < 2 * game->boardSizeX; x += 2 )
+        {
+            if( CheckMoves(game, x,y)=='y' )
+                pngabletomove++;
+        }
     }
+
+    }
+    int winner=0,winnerscore=0;
+    system("cls");
+    if(pngabletomove==0)
+    {
+
+        for(i=0; i<game->players; i++)
+        {
+            if(game->score[i]>winnerscore)
+            {
+                winner=i;
+                winnerscore=game->score[i];
+            }
+        }
+        printf("The winner is player nr.%d with score of %d points.\nCongratulations!\n",winner+1,winnerscore);
+        printf("do you want to save the board? y/n \n");
+        scanf(" %c", &choice);
+        if(choice=='y') SaveBoard(game);
+        system("cls");
+
+    }
+
+
 
 
 

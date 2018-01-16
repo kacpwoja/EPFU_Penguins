@@ -52,6 +52,17 @@ int CheckState( gameV *game )
     return -1;
 }
 
+int CheckIfMovePossible (gameV *game,coordinates mo)
+{
+    if((game->boardSizeX)*2<mo.x || game->boardSizeY<mo.y) return 0;
+    if(mo.x%2==0 && mo.y%2==1) return 0;
+    if(mo.x%2==1 && mo.y%2==0) return 0;
+    //
+    return 1;
+
+
+}
+
 void NextPlayer( gameV *game ) //switches to the next player
 {
     game->currentPlayer++;
@@ -80,7 +91,7 @@ char CheckMoves( gameV *game, coordinates png ) //checks if the penguin on given
 
     test.x = png.x - 2;
     test.y = png.y;
-    if ( test.x > 0 && game->board[test.x][test.y] > 0 )
+    if ( test.x >= 0 && game->board[test.x][test.y] > 0 )
         return 'y';
 
     test.x = png.x + 1;
@@ -90,17 +101,17 @@ char CheckMoves( gameV *game, coordinates png ) //checks if the penguin on given
 
     test.x = png.x + 1;
     test.y = png.y - 1;
-    if ( test.x < 2 * game->boardSizeX && test.y > 0 && game->board[test.x][test.y] > 0 )
+    if ( test.x < 2 * game->boardSizeX && test.y >= 0 && game->board[test.x][test.y] > 0 )
         return 'y';
 
     test.x = png.x - 1;
     test.y = png.y + 1;
-    if ( test.x > 0 && test.y < game->boardSizeY && game->board[test.x][test.y] > 0 )
+    if ( test.x >= 0 && test.y < game->boardSizeY && game->board[test.x][test.y] > 0 )
         return 'y';
 
     test.x = png.x - 1;
     test.y = png.y - 1;
-    if ( test.x > 0 && test.y > 0 && game->board[test.x][test.y] > 0 )
+    if ( test.x >= 0 && test.y >= 0 && game->board[test.x][test.y] > 0 )
         return 'y';
 
     return 'n';
