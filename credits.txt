@@ -1,0 +1,33 @@
+CREDITS:
+
+main.c:
+  automatic mode part:
+    Kacper Wojakowski
+  interactive mode part:
+    Andrzej Płatek
+
+filefunctions.c:
+  Akash Nath
+  
+game.c:
+  GenerateBoard:
+    Akash Nath
+  CheckState:
+    Kacper Wojakowski
+    Andrzej Płatek
+  CheckIfMovePossible:
+    Andrzej Płatek
+  NextPlayer, PutPenguin, TakePenguin:
+    Kacper Wojakowski
+  CheckMoves:
+    Kacper Wojakowski
+    Andrzej Płatek
+  
+automatic.c
+  Kacper Wojakowski
+  
+interactive.c
+  Andrzej Płatek
+  
+variables.h
+  Kacper Wojakowski
